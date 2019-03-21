@@ -4,6 +4,8 @@ This holds a set of constant variables for qute
 import os
 import logging
 
+from . import _resources
+
 log = logging.getLogger('qute')
 
 
@@ -35,7 +37,14 @@ QUTE_STYLE_LOCATIONS.insert(
 STYLE_DEFAULTS = {
     '_BACKGROUND_': '30, 30, 30',
     '_ALTBACKGROUND_': '70, 70, 70',
-    '_FOREGROUND_': '176, 224, 7',
-    '_HIGHLIGHT_': '250, 255, 50',
+    '_FOREGROUND_': '150, 150, 255',
+    '_HIGHLIGHT_': '200, 200, 255',
     '_TEXT_': '255, 255, 255',
 }
+
+# -- We expose all of our resources as special variables
+for resource in _resources.resources():
+    key = '_%s_' % os.path.basename(resource).replace('.', '_').upper()
+    STYLE_DEFAULTS[key] = resource
+
+print(STYLE_DEFAULTS)

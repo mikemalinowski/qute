@@ -44,51 +44,89 @@ QSplitter::handle:hover {
 }
 
 /* QScrollBar --------------------------------------------------------------- */
-QScrollBar:disabled {
-    background: rgb(_BACKGROUND_);
+/*QScrollBar:disabled {*/
+    /*background: rgb(_BACKGROUND_);*/
+/*}*/
+QScrollBar:horizontal {
+    border: 1px solid black;
+    background-color: transparent;
+    height: 24px;
+    margin: 0px 20px 0 20px;
 }
 
-QScrollBar::vertical {
-    background: rgb(_BACKGROUND_);
-    border-color: rgb(_BACKGROUND_);
-    border-style: solid;
-    margin-top:1px;
-    margin-bottom:1px;
-	min-width: 18px;
+QScrollBar::handle:horizontal {
+    background: rgba(_FOREGROUND_, 170);
+    min-width: 20px;
 }
 
-QScrollBar::horizontal {
-    background: rgb(_BACKGROUND_);
-    border-color: rgb(_BACKGROUND_);
-    border-style: solid;
-    margin-left:1px;
-    margin-right:1px;
-	min-height: 18px;
+QScrollBar::add-line:horizontal {
+    border: 1px solid black;
+    background: rgba(_FOREGROUND_, 100);
+    width: 20px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
 }
 
-QScrollBar::add-page:vertical,
-QScrollBar::sub-page:vertical,
-QScrollBar::add-line:vertical,
+QScrollBar::add-line:horizontal:hover {
+    background: rgba(_FOREGROUND_, 255);
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 1px solid black;
+    background: rgba(_FOREGROUND_, 100);
+    width: 20px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal:hover {
+    background: rgba(_FOREGROUND_, 255);
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+/* -- */
+
+QScrollBar:vertical {
+    border: 1px solid black;
+    background-color: transparent;
+    width: 24px;
+    margin: 20px 0px 20px 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(_FOREGROUND_, 170);
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical {
+    border: 1px solid black;
+    background: rgba(_FOREGROUND_, 100);
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover {
+    background: rgba(_FOREGROUND_, 255);
+}
+
 QScrollBar::sub-line:vertical {
-    background:none;
+    border: 1px solid black;
+    background: rgba(_FOREGROUND_, 100);
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
 }
 
-QScrollBar::add-line:pressed,
-QScrollBar::sub-line:pressed {
-    background: rgb(_BACKGROUND_);
+QScrollBar::sub-line:vertical:hover {
+    background: rgba(_FOREGROUND_, 255);
 }
 
-QScrollBar::handle:vertical,
-QScrollBar::handle:horizontal{
-    background: rgb(_BACKGROUND_);
-    border-color: black;
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
 }
-
-QScrollBar::handle:vertical::hover,
-QScrollBar::handle:horizontal::hover{
-    background: rgb(_HIGHLIGHT_);
-}
-
 
 /* QLabel ------------------------------------------------------------------- */
 QLabel {
@@ -104,10 +142,16 @@ QLabel:disabled{
 
 /* QLineEdit ---------------------------------------------------------------- */
 QLineEdit {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 150), stop:1 rgba(0, 0, 0, 75));
-    border: 0px;
+    border: 1px solid black;
 	color: white;
 	padding: 0px;
+    min-height: 20px;
+
+	background-color: rgba(0, 0, 0, 100);
+    background-image: url(_SQUARES_LITE_PNG_);
+    background-position: top right;
+    background-origin: content;
+    background-repeat: repeat-xy;
 }
 
 QLineEdit:disabled,
@@ -123,7 +167,11 @@ QPlainTextEdit {
 	border: 0px solid black;
 	border-top: 1px solid rgb(_FOREGROUND_);
 	border-bottom: 1px solid rgb(_FOREGROUND_);
-	background-color: transparent;
+	background-color: rgba(0, 0, 0, 100);
+    background-image: url(_SQUARES_LITE_PNG_);
+    background-position: top right;
+    background-origin: content;
+    background-repeat: repeat-xy;
 }
 
 QTextEdit:disabled,
@@ -140,6 +188,11 @@ QListView {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(_BACKGROUND_, 150), stop:1 rgba(0, 0, 0, 75));
     alternate-background-color: rgba(0, 0, 0, 50);
     border: 1px solid black;
+
+    background-image: url(_SQUARES_PNG_);
+    background-position: top right;
+    background-origin: content;
+    background-repeat: repeat-xy;
 }
 
 QListView::item {
@@ -235,7 +288,9 @@ QTabBar::tab {
 
 QTabBar::tab:selected,
 QTabBar::tab:hover {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(_FOREGROUND_, 175), stop:1 rgba(_FOREGROUND_, 75));
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 30), stop:1 rgba(0, 0, 0, 0));
+	background-image: url(_SQUARES_PNG_);
+	color: rgb(_FOREGROUND_);
 }
 
 QTabBar::tab:top,
@@ -250,11 +305,16 @@ QTabBar::tab:right {
 
 /* QComboBox ---------------------------------------------------------------- */
 QComboBox {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(_BACKGROUND_, 0), stop:1 rgba(_ALTBACKGROUND_, 50));
     border: 1px solid black;
     padding-left: 5px;
     color: floralwhite;
     min-height: 28px;
+
+	background-color: rgba(0, 0, 0, 100);
+    background-image: url(_SQUARES_LITE_PNG_);
+    background-position: top right;
+    background-origin: content;
+    background-repeat: repeat-xy;
 }
 
 QComboBox:disabled {
@@ -297,6 +357,12 @@ QSpinBox,
 QDoubleSpinBox {
 	border: 1px solid black;
 	min-height: 24px;
+
+	background-color: rgba(0, 0, 0, 100);
+    background-image: url(_SQUARES_LITE_PNG_);
+    background-position: top right;
+    background-origin: content;
+    background-repeat: repeat-xy;
 }
 
 QSpinBox:disabled,
@@ -364,6 +430,7 @@ QGroupBox::indicator:hover:!checked {
 /* QCheckBox ---------------------------------------------------------------- */
 QCheckBox{
     color: rgb(_TEXT_);
+    min-height: 26px;
 }
 
 QCheckBox:disabled {
@@ -395,6 +462,7 @@ QCheckBox::indicator:hover:!checked {
 /* QRadioButton ------------------------------------------------------------- */
 QRadioButton{
     color: rgb(_TEXT_);
+    min-height: 26px;
 }
 
 QRadioButton:disabled{
@@ -469,6 +537,11 @@ QToolButton {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(_FOREGROUND_, 175), stop:1 rgba(_FOREGROUND_, 75));
 	padding: 0px 5px 0px 5px;
     min-height: 20px;
+
+    background-image: url(_SQUARES_PNG_);
+    background-position: top right;
+    background-origin: content;
+    background-repeat: repeat-xy;
 }
 
 QPushButton:disabled,

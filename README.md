@@ -55,6 +55,64 @@ if __name__ == '__main__':
 ```
 In this example we see some of the features of qute in use, but most importantly is that it is usable in environments using either PyQt, PySide or PySide2 (thanks to Qt.py), and then utilises the various helper functionality defined within qute which you can read about below.
 
+
+##Styling
+
+Qute gives a convience function for applying stylesheets to Qt widgets. Crucually it also exposes a mechanism allowing you do define variables to be replaced within stylesheets. This helps when wanting to use the same values multiple times across a stylesheet.
+
+For example, if we have a stylesheet such as:
+
+```css
+QWidget {
+    background-color: rgb(BG_COLOR);
+    color: rgb(TEXT_COLOR);
+}
+
+QLabel {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    background-color: transparent;
+    color: rgb(TEXT_COLOR);
+}
+```
+
+This can be assigned to a widget using:
+
+```python
+import qute
+
+qute.applyStyle(
+    css_str,
+    apply_to=widget,
+    BG_COLOR='50, 50, 50',
+    TEXT_COLOR='255, 0, 0',
+)
+```
+In this example we pass a CSS string and the widget we want to apply to. Any additional keywords will be used as search and replace elements. This is handy when wanting to change sections of your stylesheet easily. Your replacements can be numbers, strings or filepaths (just ensure your slashing is / and not \\). The ```space``` example stylesheet demonstrates this by using png files for widget backgrounds.
+
+Equally, you can pass the full path to a css/qss file too:
+
+```python
+qute.applyStyle(
+    '/usr/styles/my_style.qss',
+    widget,
+)
+```
+
+Alternatively you can have a library of style sheets and set the environment variable `QUTE_STYLE_PATH` to that location. By doing this you can pass the name of the style rather than the absolute path. Qute comes with one example stylesheet called `space` which can be used to demonstrate this as below:
+```python
+qute.applyStyle(
+    'space',
+    widget,
+)   
+```
+
+This is an example of the space stylesheet:
+
+![alt text](https://github.com/mikemalinowski/qute/blob/master/docs/space_demo.png?raw=true)
+
+
+
 ##Menu Generation
 
 Generating menu's can be tedious and involve a lot of repetative code. In many cases a menu is made up of either actions, sseperators or sub-menus. 
@@ -162,57 +220,6 @@ value = qute.deriveValue(widget)
 
 This mechanism makes it easier to create dynamic ui's, especially when you're trying to expose data which can be manipulated on code objects.
 
-
-##Styling
-
-Qute gives a convience function for applying stylesheets to Qt widgets. Crucually it also exposes a mechanism allowing you do define variables to be replaced. This helps when wanting to use the same values multiple times across a stylesheet.
-
-For example, if we have a stylesheet such as:
-
-```css
-QWidget {
-    background-color: rgb(BG_COLOR);
-    color: rgb(TEXT_COLOR);
-}
-
-QLabel {
-    padding-top: 7px;
-    padding-bottom: 7px;
-    background-color: transparent;
-    color: rgb(TEXT_COLOR);
-}
-```
-
-This can be assigned to a widget using:
-
-```python
-import qute
-
-qute.applyStyle(
-    css_str,
-    apply_to=widget,
-    BG_COLOR='50, 50, 50',
-    TEXT_COLOR='255, 0, 0',
-)
-```
-In this example we pass a CSS string and the widget we want to apply to. Any additional keywords will be used as search and replace elements. This is handy when wanting to change sections of your stylesheet easily. 
-
-Equally, you can pass the full path to a css/qss file too:
-
-```python
-qute.applyStyle(
-    '/usr/styles/my_style.qss',
-    widget,
-)
-```
-
-Alternatively you can have a library of style sheets and set the environment variable `QUTE_STYLE_PATH` to that location. By doing this you can pass the name of the style rather than the absolute path. Qute comes with one example stylesheet called `razer` which can be used to demonstrate this as below:
-```python
-qute.applyStyle(
-    'razer',
-    widget,
-)   
-```
 
 
 ## Compatability

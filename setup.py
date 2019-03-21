@@ -25,7 +25,7 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     package_data={
-        '': ['styles/*.css'],
+        '': ['styles/*.css', '_res/*.png'],
     },
     keywords="qute qt pyside pyside2 pyqt",
 )
