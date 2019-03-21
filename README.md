@@ -56,7 +56,7 @@ if __name__ == '__main__':
 In this example we see some of the features of qute in use, but most importantly is that it is usable in environments using either PyQt, PySide or PySide2 (thanks to Qt.py), and then utilises the various helper functionality defined within qute which you can read about below.
 
 
-##Styling
+## Styling
 
 Qute gives a convience function for applying stylesheets to Qt widgets. Crucually it also exposes a mechanism allowing you do define variables to be replaced within stylesheets. This helps when wanting to use the same values multiple times across a stylesheet.
 
@@ -113,7 +113,7 @@ This is an example of the space stylesheet:
 
 
 
-##Menu Generation
+## Menu Generation
 
 Generating menu's can be tedious and involve a lot of repetative code. In many cases a menu is made up of either actions, sseperators or sub-menus. 
 
@@ -157,7 +157,7 @@ menu = qute.menuFromDictionary(
 ```
 
 
-##Derive
+## Derive
 
 Derive is all about dynamically generating ui elements based on data types and being able to extract values from widgets without having to know what they are. This is particularly useful when generating ui elements on the fly without knowing what they are up front.
 
