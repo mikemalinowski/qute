@@ -25,6 +25,10 @@ https://github.com/mottosso/Qt.py
 This extension aims to expose additional help utilities to Qt which are
 common place within coding projects.
 """
+__author__ = "Michael Malinowski"
+__copyright__ = "Copyright (C) 2019 Michael Malinowski"
+__license__ = "MIT"
+__version__ = "1.0.1"
 
 # -- Import all our Qt variables into this namespace - which
 # -- makes it trivial to use later
@@ -37,6 +41,7 @@ from .vendor.Qt import QtCompat
 
 from ._utils import slimify
 from ._utils import qApp
+from ._utils import toGrayscale
 
 from ._style import applyStyle
 from ._style import getCompoundedStylesheet
