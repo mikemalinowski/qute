@@ -47,4 +47,3 @@ for resource in _resources.resources():
     key = '_%s_' % os.path.basename(resource).replace('.', '_').upper()
     STYLE_DEFAULTS[key] = resource
 
-print(STYLE_DEFAULTS)
