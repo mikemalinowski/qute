@@ -37,8 +37,8 @@ QUTE_STYLE_LOCATIONS.insert(
 STYLE_DEFAULTS = {
     '_BACKGROUND_': '30, 30, 30',
     '_ALTBACKGROUND_': '70, 70, 70',
-    '_FOREGROUND_': '150, 150, 255',
-    '_HIGHLIGHT_': '200, 200, 255',
+    '_FOREGROUND_': '66, 194, 244',
+    '_HIGHLIGHT_': '109, 214, 255',
     '_TEXT_': '255, 255, 255',
 }
 
