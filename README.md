@@ -56,6 +56,71 @@ if __name__ == '__main__':
 In this example we see some of the features of qute in use, but most importantly is that it is usable in environments using either PyQt, PySide or PySide2 (thanks to Qt.py), and then utilises the various helper functionality defined within qute which you can read about below.
 
 
+# Cross Application Support
+
+This library is specifically intended for use when in environments where
+you're actively trying to share/develop tools across multiple applications
+which support PyQt, PySide or PySide2. 
+
+The premise is that you can request the main application window using 
+a common function regardless of the actual application - making it trivial
+to implement a tool which works in multiple host applications without any
+bespoke code.
+
+The current list of supported applications are:
+
+    * Native Python
+    * Maya
+    * 3dsmax
+    * Motion Builder
+
+Here is an example:
+
+```python
+import qute
+
+class MyCrossApplicationTool(qute.QWidget):
+
+    def __init__(self, parent=None):
+        super(MyCrossApplicationTool, self).__init__(parent=parent)
+
+        self.setLayout(qute.QVBoxLayout())
+        self.layout().addWidget(qute.QLabel('This tool will launch and parent under Max, Maya, Motion Builder or Pure Python'))
+
+
+# ------------------------------------------------------------------------------
+def launch(blocking=False, *args, **kwargs):
+
+    # -- This will return the running QApplication instance, or create
+    # -- one if one is not present
+    q_app = qute.qApp()
+
+    # -- Create a window and set its parent 'blindly' to what qute
+    # -- resolves as the main window.
+    window = qute.QMainWindow(parent=qute.mainWindow())
+
+    # -- Assign our widget to the window
+    window.setCentralWidget(MyCrossApplicationTool(*args, **kwargs))
+
+    window.show()
+
+    if blocking:
+        q_app.exec_()
+
+launch()
+```
+
+In the example above, we have a (somewhat simple!) tool, and we expose the
+tool through a launch function which is creating a main window. The crucial
+part is that the window is asking Qute to return the main application window
+rather than you relying on an application specific Ui.
+
+In doing this, you can copy/paste the code from the example into Max, Maya or
+Motion Builder and you will get the same widget, and that widget will be 
+correctly parented under that application, making your Ui incredibly portably
+and re-usable without an application specific layer.
+
+
 ## Styling
 
 Qute gives a convience function for applying stylesheets to Qt widgets. Crucually it also exposes a mechanism allowing you do define variables to be replaced within stylesheets. This helps when wanting to use the same values multiple times across a stylesheet.

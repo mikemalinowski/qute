@@ -28,7 +28,7 @@ common place within coding projects.
 __author__ = "Michael Malinowski"
 __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 # -- Import all our Qt variables into this namespace - which
 # -- makes it trivial to use later
@@ -52,6 +52,8 @@ from ._derive import deriveWidget
 from ._derive import deriveValue
 from ._derive import setBlindValue
 from ._derive import connectBlind
+
+from ._windows import mainWindow
 
 from . import constants
 
