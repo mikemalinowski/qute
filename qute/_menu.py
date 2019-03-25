@@ -6,7 +6,7 @@ from . import _utils
 
 
 # ------------------------------------------------------------------------------
-def menuFromDictionary(structure, parent=None, icon_paths=None):
+def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
     """
     This will generate a menu based on a dictionary structure, whereby
     the key is the label and the value is a function call. You can optionally
@@ -39,7 +39,7 @@ def menuFromDictionary(structure, parent=None, icon_paths=None):
         menu = parent
 
     else:
-        menu = QtWidgets.QMenu(parent)
+        menu = QtWidgets.QMenu(name or '', parent)
 
     for label, target in structure.items():
 
@@ -50,13 +50,19 @@ def menuFromDictionary(structure, parent=None, icon_paths=None):
 
         # -- Now check if we have a sub menu
         if isinstance(target, dict):
-            menu.addMenu(
-                menuFromDictionary(
-                    target,
-                    menu,
-                    icon_paths=icon_paths,
-                )
+            sub_menu = QtWidgets.QMenu(label, menu)
+
+            menuFromDictionary(
+                structure=target,
+                parent=sub_menu,
+                name=label,
+                icon_paths=icon_paths,
             )
+
+            menu.addMenu(
+                sub_menu,
+            )
+
             continue
 
         # -- Finally, check if the target is callable
