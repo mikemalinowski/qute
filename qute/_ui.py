@@ -40,7 +40,7 @@ def loadUi(ui_file, base_instance=None):
             # -- Compile the ui into compiled python and execute it
             pyuic.compileUi(f, o, indent=0)
             pyc = compile(o.getvalue(), '<string>', 'exec')
-            exec pyc in frame
+            exec(pyc in frame)
 
             # -- Get the form class
             form_class = frame['Ui_%s' % form_class]
