@@ -11,7 +11,7 @@ else:
 
 setuptools.setup(
     name='qute',
-    version='1.0.4',
+    version='1.0.5',
     author='Mike Malinowski',
     author_email='mike@twisted.space',
     description=short_description,

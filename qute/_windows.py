@@ -62,25 +62,12 @@ def returnNativeWindow():
 
 # ------------------------------------------------------------------------------
 def _findWindowByTitle(title):
-
     # -- Find the main application window
     for candidate in Qt.QtWidgets.QApplication.topLevelWidgets():
-
-        if type(candidate) != Qt.QtWidgets.QWidget:
-            continue
-
-        # -- Parent widget is always None
-        if candidate.parentWidget():
-            continue
-
-        candidate_title = candidate.windowTitle()
-
-        if title not in candidate_title:
-            continue
-
-        # -- This should be a valid QWidget
-        return candidate
-
+        try:
+            if title in candidate.windowTitle():
+                return candidate
+        except: pass
 
 # ------------------------------------------------------------------------------
 def returnModoMainWindow():
@@ -89,7 +76,7 @@ def returnModoMainWindow():
 
 # ------------------------------------------------------------------------------
 def returnMaxMainWindow():
-    return _findWindowByTitle('Autodesk 3ds Max 20')
+    return _findWindowByTitle('Autodesk 3ds Max')
 
 
 # ------------------------------------------------------------------------------
