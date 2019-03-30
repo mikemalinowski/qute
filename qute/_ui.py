@@ -1,8 +1,5 @@
-
-
 # noinspection PyPep8Naming
 import xml.etree.ElementTree as exml
-from cStringIO import StringIO
 
 from .vendor import Qt
 
@@ -19,6 +16,7 @@ def loadUi(ui_file, base_instance=None):
         # -- ui differently
         try:
             import pyside2uic as pyuic
+            from cStringIO import StringIO
 
         except:
             raise Exception('No implementation for loadUi found.')
@@ -40,7 +38,7 @@ def loadUi(ui_file, base_instance=None):
             # -- Compile the ui into compiled python and execute it
             pyuic.compileUi(f, o, indent=0)
             pyc = compile(o.getvalue(), '<string>', 'exec')
-            exec(pyc in frame)
+            eval('exec pyc in frame')
 
             # -- Get the form class
             form_class = frame['Ui_%s' % form_class]
