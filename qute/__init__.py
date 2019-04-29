@@ -28,7 +28,7 @@ common place within coding projects.
 __author__ = "Michael Malinowski"
 __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 
 # -- Import all our Qt variables into this namespace - which
 # -- makes it trivial to use later
@@ -44,6 +44,8 @@ from .vendor.Qt import QtCompat
 from ._utils import slimify
 from ._utils import qApp
 from ._utils import toGrayscale
+from ._utils import emptyLayout
+from ._utils import addLabel
 
 from ._style import applyStyle
 from ._style import getCompoundedStylesheet
