@@ -7,8 +7,23 @@ coding what they are.
 from .vendor.Qt import QtWidgets
 import types
 
+
 _NUMERIC_UI_MAX = 9*9*9
 _NUMERIC_UI_MIN = _NUMERIC_UI_MAX * -1
+
+
+# ------------------------------------------------------------------------------
+def is_string(value):
+    """
+    Py2/3 compatible string testing
+
+    :param value:
+    :return:
+    """
+    try:
+        return isinstance(value, basestring)
+    except NameError:
+        return isinstance(value, str)
 
 
 # ------------------------------------------------------------------------------
@@ -33,7 +48,7 @@ def deriveWidget(value, label=''):
         derived.setChecked(value)
         return derived
 
-    if value_type in types.StringTypes:
+    if is_string(value):
         derived = QtWidgets.QLineEdit()
         derived.setText(value)
         return derived

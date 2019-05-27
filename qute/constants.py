@@ -35,7 +35,7 @@ QUTE_STYLE_LOCATIONS.insert(
 # -- This is a set of default variables used when
 # -- applying style sheets
 STYLE_DEFAULTS = {
-    '_BACKGROUND_': '30, 30, 30',
+    '_BACKGROUND_': '40, 40, 40',
     '_ALTBACKGROUND_': '70, 70, 70',
     '_FOREGROUND_': '66, 194, 244',
     '_HIGHLIGHT_': '109, 214, 255',

@@ -81,7 +81,10 @@ def returnMaxMainWindow():
 
 # ------------------------------------------------------------------------------
 def returnMayaMainWindow():
-    return _findWindowByTitle('Autodesk Maya 20')
+    from maya import OpenMayaUI as omui
+    from shiboken2 import wrapInstance
+
+    return wrapInstance(long(omui.MQtUtil.mainWindow()), Qt.QtWidgets.QWidget)
 
 
 # ------------------------------------------------------------------------------
