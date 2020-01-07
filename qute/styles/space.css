@@ -137,7 +137,7 @@ QLabel {
 }
 
 QLabel:disabled{
-    color: rgb(_BACKGROUND_);
+    color: rgba(_TEXT_, 50);
 }
 
 /* QLineEdit ---------------------------------------------------------------- */

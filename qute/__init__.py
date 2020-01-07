@@ -28,16 +28,14 @@ common place within coding projects.
 __author__ = "Michael Malinowski"
 __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
-__version__ = "1.0.10"
+__version__ = "1.0.11"
 
 # -- Import all our Qt variables into this namespace - which
 # -- makes it trivial to use later
 from .vendor.Qt.QtCore import *
 from .vendor.Qt.QtGui import *
 from .vendor.Qt.QtWidgets import *
-#
-# from .vendor.Qt import QtWidgets
-# print(sorted(dir(QtWidgets)))
+
 # -- We import QtCompat explicitly
 from .vendor.Qt import QtCompat
 
@@ -46,6 +44,7 @@ from ._utils import qApp
 from ._utils import toGrayscale
 from ._utils import emptyLayout
 from ._utils import addLabel
+from ._utils import getComboIndex
 
 from ._style import applyStyle
 from ._style import getCompoundedStylesheet
@@ -58,9 +57,13 @@ from ._derive import setBlindValue
 from ._derive import connectBlind
 
 from ._windows import mainWindow
+from ._windows import MemorableWindow
+
+from ._events import printEventName
 
 from ._ui import loadUi
 
+from . import quick
 from . import constants
 
 

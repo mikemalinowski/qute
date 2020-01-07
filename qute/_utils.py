@@ -33,7 +33,7 @@ def addLabel(widget, label):
     layout.addWidget(widget)
 
     layout.setStretch(
-        1,
+        2,
         1,
     )
 
@@ -137,6 +137,44 @@ def toGrayscale(pixmap):
 
     # -- Return the pixmap
     return Qt.QtGui.QPixmap.fromImage(image)
+
+
+# ------------------------------------------------------------------------------
+def getComboIndex(combo_box, label, ignore_casing=False):
+    """
+    This will return the index of the first matching label within a combo
+    box qwidget.
+
+    If no label is found 0 is returned
+
+    :param combo_box: Widget to iterate through
+    :type combo_box: QComboBox
+
+    :param label: The combo label to match against
+    :type label: str
+
+    :param ignore_casing: If true, all text matching will be done with no
+        consideration of capitalisation. The default is False.
+    :type ignore_casing: bool
+
+    :return: int
+    """
+    # -- Convert the label to lower case if we're ignoring casing
+    label = label if not ignore_casing else label.lower()
+
+    # -- Cycling our combo box and test the string
+    for i in range(combo_box.count()):
+
+        # -- Get the current item text, and lower the casing if we're
+        # -- ignoring the casing. This means we're testing both sides
+        # -- of the argument in lower case
+        combo_text = combo_box.itemText(i)
+        combo_text = combo_text if not ignore_casing else combo_text.lower()
+
+        if combo_text == label:
+            return i
+
+    return 0
 
 
 # ------------------------------------------------------------------------------
