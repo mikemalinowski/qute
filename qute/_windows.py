@@ -42,7 +42,12 @@ def get_host():
         HOST = 'Max'
         return HOST
 
-    if 'houdini.exe' in sys.executable:
+    houdini_execs = [
+        'houdini.exe',
+        'houdinifx.exe',
+        'houdinicore.exe',
+    ]
+    if any(houdini_exec in sys.executable for houdini_exec in houdini_execs):
         HOST = 'Houdini'
         return HOST
 
@@ -96,7 +101,7 @@ def returnMayaMainWindow():
 # ------------------------------------------------------------------------------
 def returnHoudiniMainWindow():
     import hou
-    return hou.ui.mainQtWindow()
+    return hou.qt.mainWindow()
 
 
 # ------------------------------------------------------------------------------
@@ -165,6 +170,11 @@ class MemorableWindow(Qt.QtWidgets.QMainWindow):
     def moveEvent(self, event):
         self.storeSize()
         super(MemorableWindow, self).moveEvent(event)
+
+    # --------------------------------------------------------------------------
+    def hideEvent(self, event):
+        self.storeSize()
+        super(MemorableWindow, self).hideEvent(event)
 
 
 # ------------------------------------------------------------------------------
