@@ -4,11 +4,9 @@ you to extract the most common forms of data from them. This is particularly
 useful when you want to represent values through an interface without hard-
 coding what they are.
 """
-from .vendor.Qt import QtWidgets
-import types
+from ..vendor.Qt import QtWidgets
 
-
-_NUMERIC_UI_MAX = 9*9*9
+_NUMERIC_UI_MAX = 9**9
 _NUMERIC_UI_MIN = _NUMERIC_UI_MAX * -1
 
 
@@ -27,11 +25,12 @@ def is_string(value):
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def deriveWidget(value, label=''):
     """
     Given the data type of the value, this will make a guess at the best
     fit ui element to represent that value.
-    
+
     :param value: The value you want to represent through a widget
     :type value: bool, int, float, str, list or dict.
 
@@ -87,11 +86,12 @@ def deriveWidget(value, label=''):
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def deriveValue(widget):
     """
-    Given a QWidget it will call the widgets specific method to return 
+    Given a QWidget it will call the widgets specific method to return
     the likely value represented by that widget.
-    
+
     :param widget: QWidget to derive the value from
     :type widget: QWidget
 
@@ -114,6 +114,7 @@ def deriveValue(widget):
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def setBlindValue(widget, value):
     """
     This is a blind setter method, where the type of widget is unknown and
@@ -125,7 +126,7 @@ def setBlindValue(widget, value):
     :param value: The value you want to apply to the widget
     :type value: variable
 
-    :return: True if a value was set 
+    :return: True if a value was set
     """
     if isinstance(widget, QtWidgets.QAbstractSpinBox):
         widget.setValue(float(value))
@@ -149,16 +150,17 @@ def setBlindValue(widget, value):
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def connectBlind(widget, callback):
     """
     This is a blind approach to connecting the most likely value change
     event of a given widget to the given callback.
-    
-    Note: Because of the nature of signals, they can give a variety of 
-    different arguments during the signal call. For that reason it is 
-    highly recommended to utilise *args, **kwargs within the callback 
+
+    Note: Because of the nature of signals, they can give a variety of
+    different arguments during the signal call. For that reason it is
+    highly recommended to utilise *args, **kwargs within the callback
     if you do not know exactly which signal will be connected.
-    
+
     :param widget: The widget expected to emit the change signal
     :type widget: QWidget
 

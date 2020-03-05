@@ -1,12 +1,12 @@
 # noinspection PyPep8Naming
 import xml.etree.ElementTree as exml
 
-from .vendor import Qt
+from ..vendor import Qt
 
 
 # ------------------------------------------------------------------------------
 # noinspection PyPep8Naming,PyUnresolvedReferences,PyBroadException
-def loadUi(ui_file, base_instance=None):
+def load(ui_file, base_instance=None):
     try:
         return Qt.QtCompat.loadUi(ui_file, base_instance)
 

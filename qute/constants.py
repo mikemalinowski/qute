@@ -4,7 +4,7 @@ This holds a set of constant variables for qute
 import os
 import logging
 
-from . import _resources
+from . import resources
 
 log = logging.getLogger('qute')
 
@@ -43,7 +43,7 @@ STYLE_DEFAULTS = {
 }
 
 # -- We expose all of our resources as special variables
-for resource in _resources.resources():
+for resource in resources.all():
     key = '_%s_' % os.path.basename(resource).replace('.', '_').upper()
     STYLE_DEFAULTS[key] = resource
 

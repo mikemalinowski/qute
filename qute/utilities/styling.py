@@ -5,32 +5,32 @@ to widgets
 import os
 import re
 
-from . import _utils
-from . import constants
+from . import toList
+from .. import constants
 
 
 # ------------------------------------------------------------------------------
 # noinspection PyUnresolvedReferences
-def applyStyle(styles, apply_to, **kwargs):
+def apply(styles, apply_to, **kwargs):
     """
     Applies all the given styles in order (meaning each will override any
     overlapping elements of the previous).
-    
-    All kwargs are considered replacements when wrangling your stylesheet. 
+
+    All kwargs are considered replacements when wrangling your stylesheet.
     This allows you to place variables into your css file and have them resolved
     at runtime.
-    
+
     :param styles: This can be a single stylesheet or a list of stylesheets.
         The stylesheet can be given in three different forms (and is checked
         in this order):
-        
+
             * An absolute filepath to a css/qss file
-            
+
             * A Name of any stylesheet which exists in any location defined
                 within the QUTE_STYLE_PATH environment variable
-            
+
             * Actual stylesheet data
-    :type styles: This can be given either a single string or a list of 
+    :type styles: This can be given either a single string or a list of
         strings
 
     :param apply_to: The QWidget which should have the stylesheet applied
@@ -54,7 +54,7 @@ def applyStyle(styles, apply_to, **kwargs):
     """
     # -- As we allow single elements or a list of elements to be
     # -- passed we need to conform that now
-    styles = _utils.toList(styles)
+    styles = toList(styles)
     available_styles = None
 
     # -- Start collating our style data
@@ -116,24 +116,23 @@ def applyStyle(styles, apply_to, **kwargs):
 # ------------------------------------------------------------------------------
 def getCompoundedStylesheet(widget):
     """
-    This will return the entire stylesheet which is affecting this widget. 
-    The resulting stylesheet will be the widgets stylesheet, and the 
+    This will return the entire stylesheet which is affecting this widget.
+    The resulting stylesheet will be the widgets stylesheet, and the
     stylesheet of all its parents.
-    
+
     The order is such that the widgets style is last, and the root level
     widgets style is first - meaning you can apply the returned stylesheet
     to create the exact same result.
-    
+
     :param widget: Widget to read the style from
     :type widget: QWidget
-    
+
     :return: stylesheet data
     :rtype: str
     """
     all_data = [widget.styleSheet()]
 
     while widget.parentWidget():
-
         # -- Iterate to the parent
         widget = widget.parentWidget()
 
@@ -157,13 +156,13 @@ def _getAvailableStyles():
     This will look at all the stylesheet locations on the environment path
     and return a dictionary of them, where the key is the name (without a qss
     or css suffix) and the value is the absolute path.
-    
+
     Where there is a name clash, the last will always override the first.
-    
-    The order of searching is done by the order of paths defined in the 
+
+    The order of searching is done by the order of paths defined in the
     QUTE_STYLE_PATH environment variable.
-    
-    :return: 
+
+    :return:
     """
     styles = dict()
 

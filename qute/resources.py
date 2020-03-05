@@ -7,7 +7,7 @@ _RESOURCE_DIR = os.path.join(
 
 
 # ------------------------------------------------------------------------------
-def get_resource(name):
+def get(name):
     return os.path.join(
         _RESOURCE_DIR,
         name,
@@ -15,7 +15,7 @@ def get_resource(name):
 
 
 # ------------------------------------------------------------------------------
-def resources():
+def all():
     files = list()
     for filename in os.listdir(_RESOURCE_DIR):
         files.append(os.path.join(_RESOURCE_DIR, filename).replace('\\', '/'))

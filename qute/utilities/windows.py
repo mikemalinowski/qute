@@ -18,8 +18,7 @@ The current list of supported applications are:
 """
 import sys
 
-from .vendor import Qt
-from .vendor import scribble
+from ..vendor import Qt
 
 
 # ------------------------------------------------------------------------------
@@ -55,6 +54,7 @@ def get_host():
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def mainWindow():
     """
     Returns the main window regardless of what the host is
@@ -65,6 +65,7 @@ def mainWindow():
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyUnresolvedReferences,PyPep8Naming
 def returnNativeWindow():
     for candidate in Qt.QtWidgets.QApplication.topLevelWidgets():
         if isinstance(candidate, Qt.QtWidgets.QMainWindow):
@@ -72,116 +73,49 @@ def returnNativeWindow():
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyUnresolvedReferences,PyPep8Naming
 def _findWindowByTitle(title):
     # -- Find the main application window
     for candidate in Qt.QtWidgets.QApplication.topLevelWidgets():
+        # noinspection PyBroadException
         try:
             if title in candidate.windowTitle():
                 return candidate
         except: pass
 
+
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def returnModoMainWindow():
     pass
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def returnMaxMainWindow():
     return _findWindowByTitle('Autodesk 3ds Max')
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyUnresolvedReferences,PyPep8Naming
 def returnMayaMainWindow():
     from maya import OpenMayaUI as omui
     from shiboken2 import wrapInstance
 
-    try:
-        return wrapInstance(
-            long(omui.MQtUtil.mainWindow()),
-            Qt.QtWidgets.QWidget,
-        )
-
-    except:
-        return None
+    return wrapInstance(long(omui.MQtUtil.mainWindow()), Qt.QtWidgets.QWidget)
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def returnHoudiniMainWindow():
     import hou
     return hou.qt.mainWindow()
 
 
 # ------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 def returnMobuMainWindow():
     return _findWindowByTitle('MotionBuilder 20')
-
-
-# ------------------------------------------------------------------------------
-# noinspection PyPep8Naming
-class MemorableWindow(Qt.QtWidgets.QMainWindow):
-
-    # --------------------------------------------------------------------------
-    def __init__(self, identifier=None, offsetX=7, offsetY=32, *args, **kwargs):
-        super(MemorableWindow, self).__init__(*args, **kwargs)
-
-        self._offsetX = offsetX
-        self._offsetY = offsetY
-
-        # -- If we're given an id, set this object name
-        if identifier:
-            self.setObjectName(identifier)
-
-            # -- If there is any scribble data for this id we should
-            # -- update this windows geometry accordingly.
-            self.restoreSize()
-
-    # --------------------------------------------------------------------------
-    def restoreSize(self):
-        stored_data = scribble.get(self.objectName())
-
-        if 'geometry' in stored_data:
-            geom = stored_data.get(
-                'geometry',
-                [
-                    300,
-                    300,
-                    400,
-                    400,
-                ],
-            )
-
-            self.setGeometry(
-                geom[0],
-                geom[1],
-                geom[2],
-                geom[3],
-            )
-
-    # --------------------------------------------------------------------------
-    def storeSize(self):
-        stored_data = scribble.get(self.objectName())
-        stored_data['geometry'] = [
-            self.pos().x() + self._offsetX,
-            self.pos().y() + self._offsetY,
-            self.width(),
-            self.height(),
-        ]
-        stored_data.save()
-
-    # --------------------------------------------------------------------------
-    def resizeEvent(self, event):
-        self.storeSize()
-        super(MemorableWindow, self).resizeEvent(event)
-
-    # --------------------------------------------------------------------------
-    def moveEvent(self, event):
-        self.storeSize()
-        super(MemorableWindow, self).moveEvent(event)
-
-    # --------------------------------------------------------------------------
-    def hideEvent(self, event):
-        self.storeSize()
-        super(MemorableWindow, self).hideEvent(event)
 
 
 # ------------------------------------------------------------------------------
