@@ -24,7 +24,7 @@ class MyWidget(qute.QWidget):
         # -- Create a layout and set it as the base layout. Use 
         # -- qute to slim the layout - removing margins
         self.setLayout(
-            qute.slimify(qute.QVBoxLayout())
+            qute.utilities.layouts.slimify(qute.QVBoxLayout())
         )
         
         # -- Create some widgets
@@ -33,7 +33,7 @@ class MyWidget(qute.QWidget):
         
         # -- Add these to our layout
         self.layout().addWidget(self.spinner)
-        self.layout().addWidget(self.checkbox)
+        self.layout().addWidget(self.checker)
         
         # -- Finally lets connect some signals and slots without
         # -- caring what it is
@@ -46,7 +46,7 @@ class MyWidget(qute.QWidget):
 if __name__ == '__main__':
 
     # -- Use qute to get or create the QApplication instance
-    q_app = qute.qApp()
+    q_app = qute.utilities.qApp()
     
     widget = MyWidget()
     widget.show()
@@ -97,7 +97,7 @@ def launch(blocking=False, *args, **kwargs):
 
     # -- Create a window and set its parent 'blindly' to what qute
     # -- resolves as the main window.
-    window = qute.QMainWindow(parent=qute.mainWindow())
+    window = qute.QMainWindow(parent=qute.utilities.windows.mainWindow())
 
     # -- Assign our widget to the window
     window.setCentralWidget(MyCrossApplicationTool(*args, **kwargs))
@@ -146,7 +146,7 @@ This can be assigned to a widget using:
 ```python
 import qute
 
-qute.applyStyle(
+qute.utilities.styling.apply(
     css_str,
     apply_to=widget,
     BG_COLOR='50, 50, 50',
@@ -158,7 +158,7 @@ In this example we pass a CSS string and the widget we want to apply to. Any add
 Equally, you can pass the full path to a css/qss file too:
 
 ```python
-qute.applyStyle(
+qute.utilities.styling.apply(
     '/usr/styles/my_style.qss',
     widget,
 )
@@ -166,7 +166,7 @@ qute.applyStyle(
 
 Alternatively you can have a library of style sheets and set the environment variable `QUTE_STYLE_PATH` to that location. By doing this you can pass the name of the style rather than the absolute path. Qute comes with one example stylesheet called `space` which can be used to demonstrate this as below:
 ```python
-qute.applyStyle(
+qute.utilities.styling.apply(
     'space',
     widget,
 )   
@@ -182,7 +182,7 @@ This is an example of the space stylesheet:
 
 Generating menu's can be tedious and involve a lot of repetative code. In many cases a menu is made up of either actions, sseperators or sub-menus. 
 
-Each of these are supported by the menu generation function ```qute.menuFromDictionary```. The format of the dictionary you provide must conform to:
+Each of these are supported by the menu generation function ```qute.utilities.menus.menuFromDictionary```. The format of the dictionary you provide must conform to:
 
 `{'Label': function}` or `{'Label': dict}` or `{'Label': None}`
 
@@ -205,7 +205,7 @@ menu_definition = {
     'More': dict(bar=bar)
 }
 
-menu = qute.menuFromDictionary(menu_definition)
+menu = qute.utilities.menus.menuFromDictionary(menu_definition)
 ```
 
 In this example we define some functions and add them as keys, we can then generate a QMenu from that dictionary. This is especially useful when you're dynamically generating menu from variable data.
@@ -213,7 +213,7 @@ In this example we define some functions and add them as keys, we can then gener
 You can also define icons for your menu. To utilise this mechanism your icons must have the same name as the label and end in .png. You can then define the path to the icons during the menu call as shown here:
 
 ```python
-menu = qute.menuFromDictionary(
+menu = qute.utilities.menus.menuFromDictionary(
     structure=menu_definition,
     icon_paths=[
         os.path.dirname(__file__),
@@ -264,7 +264,7 @@ for node in nodes:
     for option, value in node.options:
     
         # -- Blindly create a widget to represent the widget
-        widget = qute.deriveWidget(
+        widget = qute.utilities.derive.deriveWidget(
         value=value,
         label=option,
         )
@@ -272,7 +272,7 @@ for node in nodes:
         # -- Connect the change event of the widget
         # -- to our callback - without knowing what 
         # -- the widget is or what to connect
-        qute.connectBlind(widget, example_callback)
+        qute.utilities.derive.connectBlind(widget, example_callback)
 ```
 
 We can also ask for the value from a widget without knowing what the widget is. This can be done using:
@@ -280,7 +280,7 @@ We can also ask for the value from a widget without knowing what the widget is. 
 ```python
 import qute
 
-value = qute.deriveValue(widget)
+value = qute.utilities.derive.deriveValue(widget)
 ```
 
 This mechanism makes it easier to create dynamic ui's, especially when you're trying to expose data which can be manipulated on code objects.
