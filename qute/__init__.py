@@ -30,6 +30,20 @@ __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
 __version__ = "3.0.1"
 
+# -- Our direct file loading depends on whether we're
+# -- in python 2 or python 3. Therefore we wrap these
+# -- imports in a try except
+try:
+    # noinspection PyUnresolvedReferences
+    from importlib.machinery import SourceFileLoader
+    import types
+    _py_version = 3
+
+except ImportError:
+    import imp
+    _py_version = 2
+
+
 # -- Import all our Qt variables into this namespace - which
 # -- makes it trivial to use later
 from .vendor.Qt.QtCore import *
@@ -76,6 +90,8 @@ from .utilities.designer import load as loadUi
 
 from .utilities.launch import quick_app
 
+from .extensions.tray import TimedProcessorTray
+from .extensions.tray import MemorableTimedProcessorTray
 
 # -- Quick was a convenience sub-module which became a little
 # -- too convenient to put things. Therefore its contents is
@@ -84,13 +100,21 @@ from .utilities.launch import quick_app
 from .utilities.request import confirmation as _rerouted_confirm
 from .utilities.request import text as _rerouted_getText
 from .utilities.request import filepath as _rerouted_getFilepath
-from .utilities.request import filepath as _rerouted_getFolderPath
+from .utilities.request import folderpath as _rerouted_getFolderPath
 from .extensions.dividers import HorizontalDivider as _rerouted_horizontalDivider
+from .extensions.buttons import CopyToClipboardButton as _rerouted_copyToClipBoardButton
 
+if _py_version == 3:
+    import types
+    quick = types.ModuleType('name')
 
-class quick:
-    confirm = _rerouted_confirm
-    getText = _rerouted_getText
-    getFilepath = _rerouted_getFilepath
-    getFolderPath = _rerouted_getFolderPath
-    horizontalDivider = _rerouted_horizontalDivider
+elif _py_version == 2:
+    quick = imp.new_module('qute.quick')
+
+quick.confirm = _rerouted_confirm
+quick.getText = _rerouted_getText
+quick.getFilepath = _rerouted_getFilepath
+quick.getFolderPath = _rerouted_getFolderPath
+quick.horizontalDivider = _rerouted_horizontalDivider
+quick.copyToClipBoardButton = _rerouted_copyToClipBoardButton
+quick.quick_app = quick_app

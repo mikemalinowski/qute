@@ -1,3 +1,6 @@
+from ..vendor.Qt.QtGui import QPixmap, QImage
+from ..vendor.Qt.QtCore import QByteArray, QDataStream, QIODevice
+
 from ..vendor import Qt
 
 

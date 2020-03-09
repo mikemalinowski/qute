@@ -1,3 +1,6 @@
+from ..vendor import Qt
+from . import qApp
+
 
 # ------------------------------------------------------------------------------
 def confirmation(title='Text Request', label='', parent=None, **kwargs):
