@@ -30,18 +30,21 @@ __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
 __version__ = "3.0.1"
 
+import sys
+
 # -- Our direct file loading depends on whether we're
 # -- in python 2 or python 3. Therefore we wrap these
 # -- imports in a try except
-try:
-    # noinspection PyUnresolvedReferences
-    from importlib.machinery import SourceFileLoader
+if sys.version_info.major == 3:
     import types
     _py_version = 3
 
-except ImportError:
+elif sys.version_info.major == 2:
     import imp
     _py_version = 2
+
+else:
+    raise Exception('Running in unsupported python version')
 
 
 # -- Import all our Qt variables into this namespace - which
@@ -105,7 +108,6 @@ from .extensions.dividers import HorizontalDivider as _rerouted_horizontalDivide
 from .extensions.buttons import CopyToClipboardButton as _rerouted_copyToClipBoardButton
 
 if _py_version == 3:
-    import types
     quick = types.ModuleType('name')
 
 elif _py_version == 2:

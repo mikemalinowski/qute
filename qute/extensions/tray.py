@@ -406,7 +406,7 @@ class ProcessorThread(Qt.QtCore.QThread):
             try:
                 callable_process()
 
-            except:
+            except (Exception, RuntimeError):
                 error = str(sys.exc_info())
                 print(error)
 

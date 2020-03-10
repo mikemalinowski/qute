@@ -8,7 +8,7 @@ from .. import resources
 # noinspection PyUnresolvedReferences,PyPep8Naming
 class CopyToClipboardButton(Qt.QtWidgets.QPushButton):
 
-    def __init__(self, value, size, tooltip='Copy to clipboard', parent=None):
+    def __init__(self, value, size, tooltip='Copy to clipboard', fixed_size=True, parent=None):
         super(CopyToClipboardButton, self).__init__(parent=parent)
 
         # -- Store the value to copy
@@ -21,8 +21,11 @@ class CopyToClipboardButton(Qt.QtWidgets.QPushButton):
             )
         )
 
-        # -- Fix the size of the button and tooltip
-        self.setFixedSize(size)
+        # -- Fix the size of the button if requested
+        if fixed_size:
+            self.setFixedSize(size)
+
+        # -- Assign the tooltip
         self.setToolTip(tooltip)
 
         # -- Hook up the callback

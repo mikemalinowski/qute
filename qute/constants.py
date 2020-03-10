@@ -16,12 +16,12 @@ QUTE_STYLE_PATH = 'QUTE_STYLE_PATH'
 # -- This will look at the environment variable for styles and pull
 # -- out a resolved list of those locations which exist
 QUTE_STYLE_LOCATIONS = [
-    location
+    location.strip()
     for location in os.environ.get(
         QUTE_STYLE_PATH,
         ''
-    ).split(';')
-    if os.path.exists(location)
+    ).split(os.path.pathsep)
+    if os.path.isdir(location.strip())
 ]
 
 QUTE_STYLE_LOCATIONS.insert(
