@@ -59,12 +59,14 @@ class MemorableWindow(Qt.QtWidgets.QMainWindow):
         self.storeSize()
         super(MemorableWindow, self).resizeEvent(event)
 
-    # --------------------------------------------------------------------------
     def moveEvent(self, event):
         self.storeSize()
         super(MemorableWindow, self).moveEvent(event)
 
-    # --------------------------------------------------------------------------
     def hideEvent(self, event):
         self.storeSize()
         super(MemorableWindow, self).hideEvent(event)
+
+    def closeEvent(self, event):
+        self.storeSize()
+        super(MemorableWindow, self).closeEvent(event)

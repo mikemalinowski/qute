@@ -10,18 +10,13 @@ _NUMERIC_UI_MAX = 9**9
 _NUMERIC_UI_MIN = _NUMERIC_UI_MAX * -1
 
 
-# ------------------------------------------------------------------------------
-def is_string(value):
-    """
-    Py2/3 compatible string testing
+# Python 2/3 compat
+# TODO: Use six.
+try:
+    basestring
 
-    :param value:
-    :return:
-    """
-    try:
-        return isinstance(value, basestring)
-    except NameError:
-        return isinstance(value, str)
+except NameError:
+    basestring = str
 
 
 # ------------------------------------------------------------------------------
@@ -47,26 +42,27 @@ def deriveWidget(value, label=''):
         derived.setChecked(value)
         return derived
 
-    if is_string(value):
-        derived = QtWidgets.QLineEdit()
-        derived.setText(value)
-        return derived
-
-    if value_type is float:
+    elif value_type is float:
         derived = QtWidgets.QDoubleSpinBox()
         derived.setMaximum(_NUMERIC_UI_MAX)
         derived.setMinimum(_NUMERIC_UI_MIN)
         derived.setValue(value)
         return derived
 
-    if value_type is int:
+    elif value_type is int:
         derived = QtWidgets.QSpinBox()
         derived.setMaximum(_NUMERIC_UI_MAX)
         derived.setMinimum(_NUMERIC_UI_MIN)
         derived.setValue(value)
         return derived
 
-    if value_type in [list, tuple]:
+    # -- Now start comparing inherited types.
+    elif isinstance(value, basestring):
+        derived = QtWidgets.QLineEdit()
+        derived.setText(value)
+        return derived
+
+    elif isinstance(value, (list, tuple, set)):
         derived = QtWidgets.QComboBox()
 
         for item in value:
@@ -74,15 +70,15 @@ def deriveWidget(value, label=''):
 
         return derived
 
-    elif value_type is dict:
+    # -- Support dict and common collections (OrderedDict, defaultdict etc)
+    elif isinstance(value, dict):
         widget = QtWidgets.QComboBox()
 
         for k, v in value.items():
             widget.addItem(k, userData=v)
         return widget
 
-    else:
-        return None
+    return None
 
 
 # ------------------------------------------------------------------------------
@@ -100,14 +96,14 @@ def deriveValue(widget):
     if isinstance(widget, QtWidgets.QAbstractSpinBox):
         return widget.value()
 
-    if isinstance(widget, QtWidgets.QLineEdit):
+    elif isinstance(widget, QtWidgets.QLineEdit):
         return widget.text()
 
-    if isinstance(widget, QtWidgets.QComboBox):
+    elif isinstance(widget, QtWidgets.QComboBox):
         data = widget.itemData(widget.currentIndex())
         return data or widget.currentText()
 
-    if isinstance(widget, QtWidgets.QAbstractButton):
+    elif isinstance(widget, QtWidgets.QAbstractButton):
         return widget.isChecked() if widget.isCheckable() else widget.isDown()
 
     return None
@@ -132,17 +128,17 @@ def setBlindValue(widget, value):
         widget.setValue(float(value))
         return True
 
-    if isinstance(widget, QtWidgets.QLineEdit):
+    elif isinstance(widget, QtWidgets.QLineEdit):
         widget.setText(str(value))
         return True
 
-    if isinstance(widget, QtWidgets.QComboBox):
+    elif isinstance(widget, QtWidgets.QComboBox):
         for i in range(widget.count()):
             if widget.itemText(i) == str(value):
                 widget.setCurrentIndex(i)
                 return True
 
-    if isinstance(widget, QtWidgets.QAbstractButton):
+    elif isinstance(widget, QtWidgets.QAbstractButton):
         widget.setChecked(bool(value))
         return True
 
@@ -174,15 +170,15 @@ def connectBlind(widget, callback):
         widget.textChanged.connect(callback)
         return True
 
-    if isinstance(widget, QtWidgets.QAbstractSpinBox):
+    elif isinstance(widget, QtWidgets.QAbstractSpinBox):
         widget.valueChanged.connect(callback)
         return True
 
-    if isinstance(widget, QtWidgets.QComboBox):
+    elif isinstance(widget, QtWidgets.QComboBox):
         widget.currentIndexChanged.connect(callback)
         return True
 
-    if isinstance(widget, QtWidgets.QAbstractButton):
+    elif isinstance(widget, QtWidgets.QAbstractButton):
         widget.clicked.connect(callback)
         return True
 

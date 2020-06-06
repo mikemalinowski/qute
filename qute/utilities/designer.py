@@ -10,7 +10,7 @@ def load(ui_file, base_instance=None):
     try:
         return Qt.QtCompat.loadUi(ui_file, base_instance)
 
-    except:
+    except Exception:
 
         # -- For applications such as 3dsmax we have to compile the
         # -- ui differently
@@ -18,8 +18,8 @@ def load(ui_file, base_instance=None):
             import pyside2uic as pyuic
             from cStringIO import StringIO
 
-        except:
-            raise Exception('No implementation for loadUi found.')
+        except Exception:
+            raise RuntimeError('No implementation for loadUi found.')
 
         # -- Read out the xml file
         xml_data = exml.parse(ui_file)

@@ -103,4 +103,3 @@ def setComboByText(combo_box, label, ignore_casing=False):
     """
     idx = getComboIndex(combo_box, label, ignore_casing=ignore_casing)
     combo_box.setCurrentIndex(idx)
-

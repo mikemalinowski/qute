@@ -58,7 +58,7 @@ def apply(styles, apply_to, **kwargs):
     available_styles = None
 
     # -- Start collating our style data
-    compounded_style = ''
+    compounded_style = []
 
     for given_style in styles:
 
@@ -97,11 +97,13 @@ def apply(styles, apply_to, **kwargs):
             continue
 
         # -- Add this extracted data to the compounded style
-        compounded_style += '\n' + extracted_style
+        compounded_style.append(extracted_style)
 
     # -- We need to combine the kwargs with the defaults
     styling_parameters = constants.STYLE_DEFAULTS.copy()
     styling_parameters.update(kwargs)
+
+    compounded_style = '\n'.join(compounded_style)
 
     # -- Now that we have compounded all our style information we can cycle
     # -- over it and carry out any replacements
@@ -166,19 +168,26 @@ def _getAvailableStyles():
     """
     styles = dict()
 
+    # -- Only check for qss or css files
+    valid_extensions = {'.css', '.qss'}
+
     for location in constants.QUTE_STYLE_LOCATIONS:
 
         # -- Skip it if it is not accessible
-        if not os.path.exists(location):
+        if not os.path.isdir(location):
             continue
 
-        # -- Cycle over the files in the location
-        for style_name in os.listdir(location):
+        # -- Accept direct filepaths
+        if os.path.isfile(location):
+            filename, ext = os.path.splitext(location.lower())
+            if ext in valid_extensions:
+                styles[filename] = location
 
-            test_name = style_name.lower()
-
-            # -- Only check for qss or css files
-            if test_name.endswith('.css') or test_name.endswith('.qss'):
-                styles[style_name[:-4]] = os.path.join(location, style_name)
+        else:
+            # -- Cycle over the files in the location
+            for style_name in os.listdir(location):
+                filename, ext = os.path.splitext(style_name.lower())
+                if ext in valid_extensions:
+                    styles[filename] = os.path.join(location, style_name)
 
     return styles

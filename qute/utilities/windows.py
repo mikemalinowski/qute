@@ -21,36 +21,41 @@ import sys
 from ..vendor import Qt
 
 
+# Python 2/3 compat
+# TODO: Use six.
+try:
+    long
+
+except NameError:
+    long = int
+
+
 # ------------------------------------------------------------------------------
 def get_host():
 
     global HOST
 
     if HOST:
-        return HOST
+        pass
 
-    if 'maya.exe' in sys.executable or 'mayapy.exe' in sys.executable:
+    elif ('maya.exe' in sys.executable or
+          'mayapy.exe' in sys.executable):
         HOST = 'Maya'
-        return HOST
 
-    if 'motionbuilder.exe' in sys.executable:
+    elif ('motionbuilder.exe' in sys.executable or
+          'mobupy.exe' in sys.executable):
         HOST = 'Mobu'
-        return HOST
 
-    if '3dsmax.exe' in sys.executable:
+    elif '3dsmax.exe' in sys.executable:
         HOST = 'Max'
-        return HOST
 
-    houdini_execs = [
-        'houdini.exe',
-        'houdinifx.exe',
-        'houdinicore.exe',
-    ]
-    if any(houdini_exec in sys.executable for houdini_exec in houdini_execs):
+    elif any(houdini_exec in sys.executable
+             for houdini_exec in ['houdini.exe',
+                                  'houdinifx.exe',
+                                  'houdinicore.exe']):
         HOST = 'Houdini'
-        return HOST
 
-    return 'Pure'
+    return HOST
 
 
 # ------------------------------------------------------------------------------
@@ -81,7 +86,9 @@ def _findWindowByTitle(title):
         try:
             if title in candidate.windowTitle():
                 return candidate
-        except: pass
+
+        except Exception:
+            pass
 
 
 # ------------------------------------------------------------------------------
@@ -100,9 +107,11 @@ def returnMaxMainWindow():
 # noinspection PyUnresolvedReferences,PyPep8Naming
 def returnMayaMainWindow():
     from maya import OpenMayaUI as omui
-    from shiboken2 import wrapInstance
 
-    return wrapInstance(long(omui.MQtUtil.mainWindow()), Qt.QtWidgets.QWidget)
+    return Qt.QtCompat.wrapInstance(
+        long(omui.MQtUtil.mainWindow()),
+        Qt.QtWidgets.QWidget,
+    )
 
 
 # ------------------------------------------------------------------------------
@@ -120,11 +129,11 @@ def returnMobuMainWindow():
 
 # ------------------------------------------------------------------------------
 HOST = None
-HOST_MAPPING = dict(
-    Maya=returnMayaMainWindow,
-    Max=returnMaxMainWindow,
-    Modo=returnModoMainWindow,
-    Mobu=returnMobuMainWindow,
-    Pure=returnNativeWindow,
-    Houdini=returnHoudiniMainWindow,
-)
+HOST_MAPPING = {
+    None: returnNativeWindow,
+    'Maya': returnMayaMainWindow,
+    'Max': returnMaxMainWindow,
+    'Modo': returnModoMainWindow,
+    'Mobu': returnMobuMainWindow,
+    'Houdini': returnHoudiniMainWindow,
+}
