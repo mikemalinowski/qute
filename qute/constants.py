@@ -6,6 +6,8 @@ import logging
 
 from . import resources
 
+
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger('qute')
 
 

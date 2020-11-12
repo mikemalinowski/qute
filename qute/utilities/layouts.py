@@ -9,10 +9,6 @@ def empty(layout):
     :param layout: The layout to empty.
     :type layout: QLayout
 
-    :param recurse: If True, clear contents recursively.
-        Default True.
-    :type recurse: bool
-
     :return: None
     """
     for i in reversed(range(layout.count())):

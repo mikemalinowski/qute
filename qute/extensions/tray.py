@@ -1,12 +1,13 @@
 """
 Holds System Tray utilities and classes
 """
-import sys
-import scribble
 import functools
-
+import sys
+import traceback
 
 from ..vendor import Qt
+from ..vendor import scribble
+
 from .. import utilities
 
 
@@ -78,7 +79,7 @@ class TimedProcessorTray(Qt.QtWidgets.QSystemTrayIcon):
     # --------------------------------------------------------------------------
     def closeRequest(self):
         """
-        Triggered on close. This can be overriden if you want to override this
+        Triggered on close. This can be overridden if you want to override this
         behaviour
 
         :return:
@@ -160,21 +161,22 @@ class TimedProcessorTray(Qt.QtWidgets.QSystemTrayIcon):
         This will trigger a processing run  providing there is not an
         active processing run already in progress.
         """
-        if not self._process_thread:
+        if self._process_thread:
+            return
 
-            if self.verbose:
-                self.showMessage(
-                    "Processing Tray",
-                    "About to process %s task(s)" % len(self._process_calls)
-                )
+        if self.verbose:
+            self.showMessage(
+                "Processing Tray",
+                "About to process %s task(s)" % len(self._process_calls),
+            )
 
-            # -- Create the new scan thread
-            self._process_thread = ProcessorThread(self._process_calls, self)
+        # -- Create the new scan thread
+        self._process_thread = ProcessorThread(self._process_calls, self)
 
-            # -- Ensure it clears itself once its finished, and
-            # -- initiate its start.
-            self._process_thread.finished.connect(self.onEndOfProcessing)
-            self._process_thread.start()
+        # -- Ensure it clears itself once its finished, and
+        # -- initiate its start.
+        self._process_thread.finished.connect(self.onEndOfProcessing)
+        self._process_thread.start()
 
     # --------------------------------------------------------------------------
     def onEndOfProcessing(self):
@@ -408,7 +410,7 @@ class ProcessorThread(Qt.QtCore.QThread):
 
             except (Exception, RuntimeError):
                 error = str(sys.exc_info())
-                print(error)
+                traceback.print_exc(file=sys.stdout)
 
                 if self._tray.verbose:
                     self._tray.showMessage(

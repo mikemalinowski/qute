@@ -30,7 +30,9 @@ __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
 __version__ = "3.0.10"
 
+
 import sys
+
 
 # -- Our direct file loading depends on whether we're
 # -- in python 2 or python 3. Therefore we wrap these
@@ -53,6 +55,7 @@ from .vendor.Qt.QtCore import *
 from .vendor.Qt.QtGui import *
 from .vendor.Qt.QtWidgets import *
 from .vendor.Qt import QtCompat
+
 
 from . import extensions
 from . import utilities

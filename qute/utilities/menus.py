@@ -46,10 +46,9 @@ def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
         # -- Deal with seperators first
         if not target:
             menu.addSeparator()
-            continue
 
         # -- Now check if we have a sub menu
-        if isinstance(target, dict):
+        elif isinstance(target, dict):
             sub_menu = QtWidgets.QMenu(label, menu)
 
             menuFromDictionary(
@@ -63,10 +62,8 @@ def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
                 sub_menu,
             )
 
-            continue
-
         # -- Finally, check if the target is callable
-        if callable(target):
+        elif callable(target):
 
             icon = _findIcon(label, icon_paths)
 
@@ -109,15 +106,12 @@ def _findIcon(label, icon_paths):
     :return: absolute icon path or None
     """
     # -- Ensure we're working with a list
-    icon_paths = _core.toList(icon_paths)
+    icon_paths = filter(None, _core.toList(icon_paths))
 
     for icon_path in icon_paths:
 
-        if not icon_path:
-            continue
-
         for filename in os.listdir(icon_path):
-            if filename[:-4] == label:
+            if os.path.splitext(filename)[0] == label:
                 return os.path.join(
                     icon_path,
                     filename,
