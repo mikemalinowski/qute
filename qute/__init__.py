@@ -30,22 +30,7 @@ __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
 __version__ = "3.0.10"
 
-import sys
-
-# -- Our direct file loading depends on whether we're
-# -- in python 2 or python 3. Therefore we wrap these
-# -- imports in a try except
-if sys.version_info.major == 3:
-    import types
-    _py_version = 3
-
-elif sys.version_info.major == 2:
-    import imp
-    _py_version = 2
-
-else:
-    raise Exception('Running in unsupported python version')
-
+import imp
 
 # -- Import all our Qt variables into this namespace - which
 # -- makes it trivial to use later
@@ -106,12 +91,9 @@ from .utilities.request import filepath as _rerouted_getFilepath
 from .utilities.request import folderpath as _rerouted_getFolderPath
 from .extensions.dividers import HorizontalDivider as _rerouted_horizontalDivider
 from .extensions.buttons import CopyToClipboardButton as _rerouted_copyToClipBoardButton
+from .extensions.buttons import collapseButton as _rerouted_collapseButton
 
-if _py_version == 3:
-    quick = types.ModuleType('name')
-
-elif _py_version == 2:
-    quick = imp.new_module('qute.quick')
+quick = imp.new_module('qute.quick')
 
 quick.confirm = _rerouted_confirm
 quick.getText = _rerouted_getText
@@ -119,4 +101,5 @@ quick.getFilepath = _rerouted_getFilepath
 quick.getFolderPath = _rerouted_getFolderPath
 quick.horizontalDivider = _rerouted_horizontalDivider
 quick.copyToClipBoardButton = _rerouted_copyToClipBoardButton
+quick.collapseButton = _rerouted_collapseButton
 quick.quick_app = quick_app

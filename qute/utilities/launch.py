@@ -1,9 +1,10 @@
 from .. import utilities
 from .. import extensions
+from .. import applyStyle
 
 
 # ------------------------------------------------------------------------------
-def quick_app(window_title):
+def quick_app(window_title, style=None):
     """
     Decorator to use on a function that is expected to return a widget that
     will be set as the Main Widget in the window that is created.
@@ -27,6 +28,12 @@ def quick_app(window_title):
 
             # -- Set the window properties
             window.setWindowTitle(window_title)
+
+            if style:
+                applyStyle(
+                    style,
+                    apply_to=window
+                )
 
             # -- Show the ui, and if we're blocking call the exec_
             window.show()

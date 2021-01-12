@@ -91,6 +91,10 @@ def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
             # -- Finally add the action to the menu
             menu.addAction(action)
 
+        # -- this allows the user to pre-construct their own actions with more advanced set-ups
+        elif isinstance(target, QtWidgets.QAction):
+            menu.addAction(target)
+
     return menu
 
 

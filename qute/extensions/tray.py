@@ -4,10 +4,104 @@ Holds System Tray utilities and classes
 import sys
 import scribble
 import functools
-
+import datetime
 
 from ..vendor import Qt
 from .. import utilities
+
+
+# ------------------------------------------------------------------------------
+# noinspection PyUnresolvedReferences
+class LogWindow(Qt.QtWidgets.QMainWindow):
+
+    # --------------------------------------------------------------------------
+    def __init__(self, parent=None):
+        super(LogWindow, self).__init__(parent=parent)
+
+        # -- Define a title expressing what the window is
+        self.setWindowTitle('Logs')
+
+        # -- We only need one widget - a text window
+        self.text_edit = Qt.QtWidgets.QTextEdit()
+        self.text_edit.setReadOnly(True)
+        self.text_edit.setLineWrapMode(self.text_edit.NoWrap)
+
+        # -- Drop in the logs
+        self.text_edit.document().setPlainText(''.join(OutputStream.Logs))
+        self.setCentralWidget(self.text_edit)
+
+        # -- Make it pretty and consistent with our styling
+        utilities.styling.apply(['space'], self)
+
+        # -- Track the log count
+        self.log_count = 0
+
+        # -- To prevent us from having to deal with emissions from
+        # -- different threads, and thread safety we simply update
+        # -- the view on a timer
+        self._timer = Qt.QtCore.QTimer(self)
+        self._timer.setSingleShot(False)
+        self._timer.setInterval(500)
+        self._timer.timeout.connect(self.updateEntries)
+        self._timer.start()
+
+    # --------------------------------------------------------------------------
+    def updateEntries(self):
+        """
+        Triggers an update of the logs, based on the log stream
+
+        :return:
+        """
+        # -- If the amount of logs has not changed, we do nothing
+        # if self.log_count == len(OutputStream.Logs):
+        #     return
+
+        # -- Set the text of the logs
+        self.text_edit.document().setPlainText(''.join(OutputStream.Logs))
+        self.text_edit.ensureCursorVisible()
+
+        # -- Store how many logs we have dealt with, so we can see
+        # -- if anything needs updating next time around
+        self.log_count = len(OutputStream.Logs)
+
+    # --------------------------------------------------------------------------
+    def hideEvent(self, *args, **kwargs):
+        """
+        When the window is hidden, we do not need to update the view
+
+        :return:
+        """
+        self._timer.stop()
+
+    # --------------------------------------------------------------------------
+    def showEvent(self, *args, **kwargs):
+        """
+        When the window is hidden, we do not need to update the view
+
+        :return:
+        """
+        self._timer.start()
+
+
+# ------------------------------------------------------------------------------
+class OutputStream(object):
+    """
+    Log class to retrieve log information from
+    """
+    Logs = list()
+
+    MAX_ENTRIES = 10000
+
+    # --------------------------------------------------------------------------
+    def write(self, text_):
+        if not text_.strip():
+            return
+        try:
+            text_ = text_.decode('ascii')
+        except:
+            return
+        OutputStream.Logs.append('\n' + str(datetime.datetime.now()) + ' :: ' + text_.strip())
+        OutputStream.Logs = OutputStream.Logs[len(OutputStream.Logs) - OutputStream.MAX_ENTRIES:]
 
 
 # ------------------------------------------------------------------------------
@@ -24,6 +118,8 @@ class TimedProcessorTray(Qt.QtWidgets.QSystemTrayIcon):
                  *args,
                  **kwargs):
         super(TimedProcessorTray, self).__init__(*args, **kwargs)
+
+        self._log_window = None
 
         # -- Store any options we have been given about how we should
         # -- perform any processing
@@ -72,6 +168,10 @@ class TimedProcessorTray(Qt.QtWidgets.QSystemTrayIcon):
 
     # --------------------------------------------------------------------------
     def onActivate(self, reason):
+        if reason == self.DoubleClick:
+            self._log_window = LogWindow()
+            self._log_window.show()
+
         if reason == self.Context:
             self.generateMenu()
 

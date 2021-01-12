@@ -3,6 +3,26 @@ from . import qApp
 
 
 # ------------------------------------------------------------------------------
+def message(title='Text Request', label='', parent=None, **kwargs):
+    """
+    Quick and easy access for getting text input. You do not have to have a
+    QApplication instance, as this will look for one.
+
+    :return: str, or None
+    """
+    # -- Ensure we have a QApplication instance
+    q_app = qApp()
+
+    answer = Qt.QtWidgets.QMessageBox.information(
+        parent,
+        title,
+        label,
+    )
+
+    return True
+
+
+# ------------------------------------------------------------------------------
 def confirmation(title='Text Request', label='', parent=None, **kwargs):
     """
     Quick and easy access for getting text input. You do not have to have a

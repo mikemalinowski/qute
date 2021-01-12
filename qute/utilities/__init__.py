@@ -9,3 +9,5 @@ from . import pixmaps
 from . import styling
 from . import widgets
 from . import windows
+from . import request
+from . import sizing
