@@ -5,10 +5,11 @@ Just added comments on the offical PySide example.
 @date 08-2013
 @source http://josbalcaen.com/pyqt-flowlayout-maya-python/
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-import qute
+from ..vendor import Qt
 
 
-class FlowLayout(qute.QLayout):
+
+class FlowLayout(Qt.QtWidgets.QLayout):
     """Custom layout that mimics the behaviour of a flow layout"""
 
     def __init__(self, parent=None, margin=0, spacing=-1):
@@ -51,17 +52,17 @@ class FlowLayout(qute.QLayout):
         return None
 
     def insertWidget(self, index, widget):
-        item = qute.QWidgetItem(widget)
+        item = Qt.QtWidgets.QWidgetItem(widget)
         self.itemList.insert(index, item)
 
     def expandingDirections(self):
-        return qute.vendor.Qt.QtCore.Qt.Orientations(qute.vendor.Qt.QtCore.Qt.Horizontal)
+        return Qt.QtCore.Qt.Orientations(Qt.QtCore.Qt.Horizontal)
 
     def hasHeightForWidth(self):
         return True
 
     def heightForWidth(self, width):
-        height = self.doLayout(qute.QRect(0, 0, width, 0), True)
+        height = self.doLayout(Qt.QtCore.QRect(0, 0, width, 0), True)
         return height
 
     def setGeometry(self, rect):
@@ -73,13 +74,13 @@ class FlowLayout(qute.QLayout):
 
     def minimumSize(self):
         # Calculate the size
-        size = qute.QSize()
+        size = Qt.QtCore.QSize()
 
         for item in self.itemList:
             size = size.expandedTo(item.minimumSize())
 
         # Add the margins
-        size += qute.QSize(2 * self.margin(), 2 * self.margin())
+        size += Qt.QtCore.QSize(2 * self.margin(), 2 * self.margin())
 
         return size
 
@@ -100,7 +101,7 @@ class FlowLayout(qute.QLayout):
                 lineHeight = 0
 
             if not testOnly:
-                item.setGeometry(qute.QRect(qute.QPoint(x, y), item.sizeHint()))
+                item.setGeometry(Qt.QtCore.QRect(Qt.QtCore.QPoint(x, y), item.sizeHint()))
 
             x = nextX
             lineHeight = max(lineHeight, item.sizeHint().height())

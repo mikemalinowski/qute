@@ -25,8 +25,7 @@ def is_string(value):
 
 
 # ------------------------------------------------------------------------------
-# noinspection PyPep8Naming
-def deriveWidget(value, label=''):
+def deriveWidget(value, label='', tooltip=''):
     """
     Given the data type of the value, this will make a guess at the best
     fit ui element to represent that value.
@@ -45,11 +44,13 @@ def deriveWidget(value, label=''):
     if value_type is bool:
         derived = QtWidgets.QCheckBox(label)
         derived.setChecked(value)
+        derived.setToolTip(tooltip)
         return derived
 
     if is_string(value):
         derived = QtWidgets.QLineEdit()
         derived.setText(value)
+        derived.setToolTip(tooltip)
         return derived
 
     if value_type is float:
@@ -57,6 +58,7 @@ def deriveWidget(value, label=''):
         derived.setMaximum(_NUMERIC_UI_MAX)
         derived.setMinimum(_NUMERIC_UI_MIN)
         derived.setValue(value)
+        derived.setToolTip(tooltip)
         return derived
 
     if value_type is int:
@@ -64,10 +66,12 @@ def deriveWidget(value, label=''):
         derived.setMaximum(_NUMERIC_UI_MAX)
         derived.setMinimum(_NUMERIC_UI_MIN)
         derived.setValue(value)
+        derived.setToolTip(tooltip)
         return derived
 
     if value_type in [list, tuple]:
         derived = QtWidgets.QComboBox()
+        derived.setToolTip(tooltip)
 
         for item in value:
             derived.addItem(item)
@@ -76,6 +80,7 @@ def deriveWidget(value, label=''):
 
     elif value_type is dict:
         widget = QtWidgets.QComboBox()
+        widget.setToolTip(tooltip)
 
         for k, v in value.items():
             widget.addItem(k, userData=v)

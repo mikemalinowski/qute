@@ -91,7 +91,6 @@ from .utilities.request import filepath as _rerouted_getFilepath
 from .utilities.request import folderpath as _rerouted_getFolderPath
 from .extensions.dividers import HorizontalDivider as _rerouted_horizontalDivider
 from .extensions.buttons import CopyToClipboardButton as _rerouted_copyToClipBoardButton
-from .extensions.buttons import collapseButton as _rerouted_collapseButton
 
 quick = imp.new_module('qute.quick')
 
@@ -101,5 +100,4 @@ quick.getFilepath = _rerouted_getFilepath
 quick.getFolderPath = _rerouted_getFolderPath
 quick.horizontalDivider = _rerouted_horizontalDivider
 quick.copyToClipBoardButton = _rerouted_copyToClipBoardButton
-quick.collapseButton = _rerouted_collapseButton
 quick.quick_app = quick_app
