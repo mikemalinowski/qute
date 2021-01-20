@@ -2,10 +2,10 @@
 Holds System Tray utilities and classes
 """
 import sys
-import scribble
 import functools
 import datetime
 
+from ..vendor import scribble
 from ..vendor import Qt
 from .. import utilities
 
