@@ -101,8 +101,14 @@ def returnMaxMainWindow():
 def returnMayaMainWindow():
     from maya import OpenMayaUI as omui
     from shiboken2 import wrapInstance
+    
+    try:
+        return wrapInstance(long(omui.MQtUtil.mainWindow()), Qt.QtWidgets.QWidget)
 
-    return wrapInstance(long(omui.MQtUtil.mainWindow()), Qt.QtWidgets.QWidget)
+    except:
+        pass
+
+    return wrapInstance(int(omui.MQtUtil.mainWindow()), Qt.QtWidgets.QWidget)
 
 
 # ------------------------------------------------------------------------------
