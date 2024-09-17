@@ -25,7 +25,7 @@ def is_string(value):
 
 
 # ------------------------------------------------------------------------------
-def deriveWidget(value, label='', tooltip=''):
+def deriveWidget(value, label='', tooltip='', options=None):
     """
     Given the data type of the value, this will make a guess at the best
     fit ui element to represent that value.
@@ -38,6 +38,12 @@ def deriveWidget(value, label='', tooltip=''):
 
     :return: QWidget
     """
+
+    if type(value) == type:
+        value_type = value
+    else:
+        value_type = type(value)
+
     # -- Determine the type of the value coming in
     value_type = type(value)
 
@@ -48,15 +54,37 @@ def deriveWidget(value, label='', tooltip=''):
         return derived
 
     if is_string(value):
-        derived = QtWidgets.QLineEdit()
-        derived.setText(value)
-        derived.setToolTip(tooltip)
+
+        # -- If we are given options for a string, then we show it as a
+        # -- combo rather than a string entry
+        if options:
+            derived = QtWidgets.QComboBox()
+            derived.setToolTip(tooltip)
+
+            default_idx = 0
+
+            for idx, item in enumerate(options):
+                derived.addItem(item)
+
+                # -- If we have a match, store the idx so we can
+                # -- set the value to it
+                if item == value:
+                    default_idx = idx
+
+            derived.setCurrentIndex(default_idx)
+
+        else:
+            derived = QtWidgets.QLineEdit()
+            derived.setText(value)
+            derived.setToolTip(tooltip)
+
         return derived
 
     if value_type is float:
         derived = QtWidgets.QDoubleSpinBox()
         derived.setMaximum(_NUMERIC_UI_MAX)
         derived.setMinimum(_NUMERIC_UI_MIN)
+        derived.setDecimals(4)
         derived.setValue(value)
         derived.setToolTip(tooltip)
         return derived
@@ -115,6 +143,9 @@ def deriveValue(widget):
     if isinstance(widget, QtWidgets.QAbstractButton):
         return widget.isChecked() if widget.isCheckable() else widget.isDown()
 
+    if hasattr(widget, "get_value"):
+        return widget.get_value()
+
     return None
 
 
@@ -149,6 +180,10 @@ def setBlindValue(widget, value):
 
     if isinstance(widget, QtWidgets.QAbstractButton):
         widget.setChecked(bool(value))
+        return True
+
+    if hasattr(widget, "set_value"):
+        widget.set_value(value)
         return True
 
     return False
@@ -189,6 +224,10 @@ def connectBlind(widget, callback):
 
     if isinstance(widget, QtWidgets.QAbstractButton):
         widget.clicked.connect(callback)
+        return True
+
+    if hasattr(widget, "changed"):
+        widget.changed.connect(callback)
         return True
 
     return False

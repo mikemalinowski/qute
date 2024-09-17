@@ -28,9 +28,9 @@ common place within coding projects.
 __author__ = "Michael Malinowski"
 __copyright__ = "Copyright (C) 2019 Michael Malinowski"
 __license__ = "MIT"
-__version__ = "3.0.11"
+__version__ = "4.0.1"
 
-import imp
+#import imp
 
 # -- Import all our Qt variables into this namespace - which
 # -- makes it trivial to use later
@@ -80,24 +80,3 @@ from .utilities.launch import quick_app
 
 from .extensions.tray import TimedProcessorTray
 from .extensions.tray import MemorableTimedProcessorTray
-
-# -- Quick was a convenience sub-module which became a little
-# -- too convenient to put things. Therefore its contents is
-# -- now spread around. However, for the sake of backward compatability
-# -- we need to nest its functionality in a placeholder class
-from .utilities.request import confirmation as _rerouted_confirm
-from .utilities.request import text as _rerouted_getText
-from .utilities.request import filepath as _rerouted_getFilepath
-from .utilities.request import folderpath as _rerouted_getFolderPath
-from .extensions.dividers import HorizontalDivider as _rerouted_horizontalDivider
-from .extensions.buttons import CopyToClipboardButton as _rerouted_copyToClipBoardButton
-
-quick = imp.new_module('qute.quick')
-
-quick.confirm = _rerouted_confirm
-quick.getText = _rerouted_getText
-quick.getFilepath = _rerouted_getFilepath
-quick.getFolderPath = _rerouted_getFolderPath
-quick.horizontalDivider = _rerouted_horizontalDivider
-quick.copyToClipBoardButton = _rerouted_copyToClipBoardButton
-quick.quick_app = quick_app

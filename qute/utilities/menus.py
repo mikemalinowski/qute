@@ -6,7 +6,7 @@ from ..vendor.Qt import QtGui
 
 
 # ------------------------------------------------------------------------------
-def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
+def menuFromDictionary(structure, parent=None, name=None, icon_paths=None, icon_map=None):
     """
     This will generate a menu based on a dictionary structure, whereby
     the key is the label and the value is a function call. You can optionally
@@ -52,11 +52,21 @@ def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
         if isinstance(target, dict):
             sub_menu = QtWidgets.QMenu(label, menu)
 
+            icon = _findIcon(label, icon_paths, icon_map)
+
+            if icon:
+                sub_menu.setIcon(
+                    QtGui.QPixmap(
+                        icon,
+                    ),
+                )
+
             menuFromDictionary(
                 structure=target,
                 parent=sub_menu,
                 name=label,
                 icon_paths=icon_paths,
+                icon_map=icon_map
             )
 
             menu.addMenu(
@@ -68,7 +78,7 @@ def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
         # -- Finally, check if the target is callable
         if callable(target):
 
-            icon = _findIcon(label, icon_paths)
+            icon = _findIcon(label, icon_paths, icon_map)
 
             if icon:
                 # -- Create the menu action
@@ -99,7 +109,7 @@ def menuFromDictionary(structure, parent=None, name=None, icon_paths=None):
 
 
 # ------------------------------------------------------------------------------
-def _findIcon(label, icon_paths):
+def _findIcon(label, icon_paths, icon_map=None):
     """
     Private function for finding png icons with the label name
     from any of the given icon paths
@@ -112,6 +122,9 @@ def _findIcon(label, icon_paths):
 
     :return: absolute icon path or None
     """
+    if icon_map and label in icon_map:
+        return icon_map[label]
+
     # -- Ensure we're working with a list
     icon_paths = _core.toList(icon_paths)
 

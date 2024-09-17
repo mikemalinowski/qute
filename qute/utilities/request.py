@@ -123,3 +123,29 @@ def folderpath(title='Folder Request', path='', parent=None):
         Qt.QtWidgets.QFileDialog.ShowDirsOnly,
     )
 
+
+# ------------------------------------------------------------------------------
+def item(items, title='Text Request', label='', parent=None, *args, **kwargs):
+    """
+    Quick and easy access for getting text input. You do not have to have a
+    QApplication instance, as this will look for one.
+
+    :return: str, or None
+    """
+    # -- Ensure we have a QApplication instance
+    q_app = qApp()
+
+    # -- Get the text
+    name, ok = Qt.QtWidgets.QInputDialog.getItem(
+        parent,
+        title,
+        label,
+        items,
+        *args,
+        **kwargs
+    )
+
+    if not ok:
+        return None
+
+    return name
